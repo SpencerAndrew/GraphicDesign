@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studio X | Graphic Design Portfolio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Smooth scrolling behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#0a0a0a] text-gray-100 font-sans selection:bg-purple-500 selection:text-white">
+
+    <!-- --- NAVIGATION --- -->
+    <nav id="navbar" class="fixed w-full z-40 transition-all duration-300 bg-transparent py-6">
+        <div class="container mx-auto px-6 md:px-12 flex justify-between items-center">
+            <a href="#" class="text-2xl font-black tracking-tighter">
+                STUDIO<span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">X</span>
+            </a>
+
+            <!-- Desktop Nav -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide">
+                <a href="#work" class="hover:text-purple-400 transition-colors">Work</a>
+                <a href="#about" class="hover:text-purple-400 transition-colors">About</a>
+                <a href="#contact" class="hover:text-purple-400 transition-colors">Contact</a>
+                <a href="#contact" class="px-5 py-2.5 rounded-full bg-white text-black hover:bg-gray-200 transition-transform hover:scale-105 active:scale-95 font-semibold">
+                    Hire Me
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-btn" class="md:hidden text-gray-300 hover:text-white">
+                <i data-lucide="menu" id="mobile-menu-icon" class="w-7 h-7"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#0a0a0a] z-30 transition-transform duration-300 ease-in-out pt-24 px-6 translate-x-full">
+        <div class="flex flex-col space-y-6 text-2xl font-bold">
+            <a href="#work" class="mobile-link hover:text-purple-400">Work</a>
+            <a href="#about" class="mobile-link hover:text-purple-400">About</a>
+            <a href="#contact" class="mobile-link hover:text-purple-400">Contact</a>
+        </div>
+    </div>
+
+    <!-- --- HERO SECTION --- -->
+    <section class="relative pt-40 pb-20 md:pt-52 md:pb-32 px-6 md:px-12 overflow-hidden flex items-center min-h-[80vh]">
+        <!-- Abstract background blur -->
+        <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-600/30 rounded-full blur-[120px] -z-10 mix-blend-screen pointer-events-none"></div>
+        <div class="absolute bottom-1/4 right-1/4 w-[30rem] h-[30rem] bg-pink-600/20 rounded-full blur-[150px] -z-10 mix-blend-screen pointer-events-none"></div>
+
+        <div class="container mx-auto max-w-5xl text-center z-10">
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-black tracking-tight leading-[1.1] mb-6">
+                Designing <br class="hidden md:block"/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+                    Visual Experiences.
+                </span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-10 font-light">
+                I'm a tech-driven freelance designer passionate about crafting versatile, high-impact graphics for digital platforms, branding, and everything in between.
+            </p>
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#work" class="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold tracking-wide hover:shadow-[0_0_30px_rgba(168,85,247,0.4)] transition-all hover:-translate-y-1">
+                    Explore Portfolio
+                </a>
+                <a href="#contact" class="w-full sm:w-auto px-8 py-4 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-white font-bold tracking-wide transition-all">
+                    Let's Talk
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- PORTFOLIO SECTION --- -->
+    <section id="work" class="py-20 px-6 md:px-12 container mx-auto">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Selected Work</h2>
+                <p class="text-gray-400">A collection of my recent creative endeavors.</p>
+            </div>
+            
+            <!-- Filters (Populated by JS) -->
+            <div id="filter-container" class="flex flex-wrap gap-2"></div>
+        </div>
+
+        <!-- Project Grid (Populated by JS) -->
+        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+    </section>
+
+    <!-- --- LIGHTBOX MODAL --- -->
+    <div id="modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/95 p-4 md:p-12 backdrop-blur-sm">
+        <button id="modal-close-btn" class="absolute top-6 right-6 text-white/50 hover:text-white transition-colors z-50 bg-black/50 p-2 rounded-full">
+            <i data-lucide="x" class="w-8 h-8"></i>
+        </button>
+        
+        <div class="flex flex-col lg:flex-row w-full max-w-7xl max-h-full bg-[#111] rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative">
+            <!-- Modal Image -->
+            <div class="lg:w-2/3 h-[40vh] lg:h-[85vh] bg-black relative group">
+                <img id="modal-img" src="" alt="" class="w-full h-full object-contain" />
+                <a id="modal-img-link" href="" target="_blank" rel="noreferrer" class="absolute bottom-6 right-6 bg-white/10 hover:bg-white/20 backdrop-blur-md p-3 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity" title="View Full Resolution">
+                    <i data-lucide="maximize-2" class="w-5 h-5"></i>
+                </a>
+            </div>
+
+            <!-- Modal Content -->
+            <div class="lg:w-1/3 p-8 lg:p-12 flex flex-col justify-center overflow-y-auto">
+                <span id="modal-category" class="inline-block px-3 py-1 bg-purple-500/20 text-purple-400 rounded-full text-sm font-semibold w-fit mb-6"></span>
+                <h3 id="modal-title" class="text-3xl lg:text-4xl font-bold mb-4"></h3>
+                <p id="modal-desc" class="text-gray-400 leading-relaxed mb-8 text-lg"></p>
+                
+                <div class="mt-auto pt-8 border-t border-white/10">
+                    <p class="text-sm text-gray-500 mb-4 uppercase tracking-wider font-semibold">Project Details</p>
+                    <ul class="space-y-3">
+                        <li class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Client</span>
+                            <span class="font-medium">Self-Initiated</span>
+                        </li>
+                        <li class="flex justify-between border-b border-white/5 pb-2">
+                            <span class="text-gray-400">Year</span>
+                            <span class="font-medium">2026</span>
+                        </li>
+                        <li class="flex justify-between pb-2">
+                            <span class="text-gray-400">Role</span>
+                            <span class="font-medium">Art Direction, Design</span>
+                        </li>
+                    </ul>
+
+                    <!-- AI Critique Section -->
+                    <div class="mt-6 p-5 bg-purple-900/20 border border-purple-500/30 rounded-xl relative overflow-hidden">
+                        <div class="absolute top-0 right-0 p-2 opacity-10 pointer-events-none">
+                            <i data-lucide="sparkles" class="w-12 h-12"></i>
+                        </div>
+                        <div id="ai-critique-section">
+                            <!-- Populated dynamically via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- ABOUT SECTION --- -->
+    <section id="about" class="py-20 px-6 md:px-12 container mx-auto relative">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-blue-600/10 rounded-full blur-[100px] -z-10 pointer-events-none"></div>
+        
+        <div class="flex flex-col lg:flex-row gap-16 items-center">
+            <div class="lg:w-1/2 relative">
+                <div class="aspect-square rounded-3xl overflow-hidden relative">
+                    <img src="https://images.unsplash.com/photo-1557672172-298e090bd0f1?q=80&w=1000&auto=format&fit=crop" alt="Abstract texture" class="w-full h-full object-cover" />
+                    <div class="absolute inset-0 bg-gradient-to-tr from-purple-900/50 to-transparent mix-blend-overlay"></div>
+                    <div class="absolute bottom-8 left-8 bg-black/40 backdrop-blur-md border border-white/10 p-6 rounded-2xl max-w-xs">
+                        <p class="text-2xl font-bold text-white mb-1">5+ Years</p>
+                        <p class="text-gray-300 text-sm">Crafting visual identities for brands worldwide.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lg:w-1/2">
+                <h2 class="text-4xl md:text-5xl font-bold mb-6">Behind the Canvas</h2>
+                <p class="text-xl text-gray-300 font-light mb-6 leading-relaxed">
+                    I am a digitally-native designer driven by a passion for technology and a deep love for crafting compelling visual identities for brands worldwide.
+                </p>
+                <p class="text-gray-400 mb-10 leading-relaxed">
+                    By blending cutting-edge technical skills with bold aesthetic choices, I build scalable, systematic design solutions that help modern companies stand out. I thrive at the intersection of code and creativity, turning complex digital challenges into seamless, unforgettable brand experiences that resonate globally.
+                </p>
+                
+                <div class="mb-10">
+                    <div>
+                        <h4 class="text-white font-bold mb-2">Capabilities</h4>
+                        <ul class="text-gray-400 space-y-2 text-sm grid grid-cols-2 gap-x-6">
+                            <li>Global Brand Identity</li>
+                            <li>Technical UI/UX Design</li>
+                            <li>Digital Experiences</li>
+                            <li>Design Systems</li>
+                            <li>Creative Coding</li>
+                            <li>Web Development</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- CONTACT CTA --- -->
+    <section id="contact" class="py-24 px-6 md:px-12 relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-[#0a0a0a] to-[#1a0b2e] -z-10"></div>
+        <div class="container mx-auto max-w-4xl bg-white/5 border border-white/10 rounded-3xl p-8 md:p-16 backdrop-blur-sm relative overflow-hidden">
+            <!-- Decorative shapes inside card -->
+            <div class="absolute -top-24 -right-24 w-48 h-48 bg-pink-500/30 rounded-full blur-[50px] pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-48 h-48 bg-purple-500/30 rounded-full blur-[50px] pointer-events-none"></div>
+
+            <div class="text-center mb-10 relative z-10">
+                <h2 class="text-4xl md:text-5xl font-bold mb-4">Let's build something.</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Not sure what design services you need? Tell my AI assistant about your brand, and let's brainstorm a custom project scope!
+                </p>
+            </div>
+
+            <div class="relative z-10 max-w-2xl mx-auto space-y-6">
+                <!-- Initial Input UI -->
+                <div id="brainstorm-initial-ui" class="flex flex-col md:flex-row gap-4">
+                    <input 
+                        type="text"
+                        id="brand-input"
+                        placeholder="e.g., I'm starting an eco-friendly streetwear brand..."
+                        class="flex-1 bg-black/40 border border-white/10 rounded-xl px-6 py-4 text-white focus:outline-none focus:border-purple-500 transition-colors"
+                    />
+                    <button 
+                        id="brainstorm-btn"
+                        class="px-8 py-4 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold tracking-wide hover:shadow-[0_0_20px_rgba(168,85,247,0.4)] transition-all flex items-center justify-center gap-2 whitespace-nowrap"
+                    >
+                        <i data-lucide="sparkles" class="w-5 h-5"></i>
+                        ✨ Brainstorm
+                    </button>
+                </div>
+
+                <!-- Result UI (Hidden initially) -->
+                <div id="brainstorm-result" class="hidden"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- --- FOOTER --- -->
+    <footer class="border-t border-white/10 bg-[#050505] pt-16 pb-8 px-6 md:px-12 text-sm text-gray-500">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex flex-col items-center md:items-start">
+                <a href="#" class="text-xl font-black tracking-tighter text-white mb-2">
+                    STUDIO<span class="text-purple-500">X</span>
+                </a>
+                <p>&copy; <span id="current-year"></span> Studio X Design. All rights reserved.</p>
+            </div>
+            
+            <div class="flex gap-6">
+                <a href="#" class="hover:text-purple-400 transition-colors" aria-label="Instagram"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-purple-400 transition-colors" aria-label="Dribbble"><i data-lucide="dribbble" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-purple-400 transition-colors" aria-label="Github"><i data-lucide="github" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- --- JAVASCRIPT --- -->
+    <script>
+        // --- API CONFIGURATION ---
+        const apiKey = "";
+        
+        async function generateAIContent(prompt, systemPrompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            const attempt = async (retries = 5, delay = 1000) => {
+                try {
+                    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+                    if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+                    const data = await res.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+                } catch (error) {
+                    if (retries > 0) {
+                        await new Promise(r => setTimeout(r, delay));
+                        return attempt(retries - 1, delay * 2);
+                    }
+                    throw error;
+                }
+            };
+            return attempt();
+        }
+
+        // --- MOCK DATA ---
+        const PORTFOLIO_DATA = [
+            { id: 1, title: "Neon Cyberpunk Poster", category: "Illustration", imageUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2000&auto=format&fit=crop", description: "A vibrant, futuristic poster design exploring neon typography and abstract 3D elements." },
+            { id: 2, title: "Aura Skincare Branding", category: "Branding", imageUrl: "https://images.unsplash.com/photo-1599305090598-fe179d501227?q=80&w=2000&auto=format&fit=crop", description: "Minimalist and elegant brand identity for a premium organic skincare line." },
+            { id: 3, title: "Fintech App UI", category: "UI/UX", imageUrl: "https://images.unsplash.com/photo-1618761714954-0b8cd0026356?q=80&w=2000&auto=format&fit=crop", description: "Clean and intuitive mobile interface for a modern cryptocurrency trading platform." },
+            { id: 5, title: "Urban Magazine Layout", category: "Print", imageUrl: "https://images.unsplash.com/photo-1585829365295-ab7cd400c167?q=80&w=2000&auto=format&fit=crop", description: "Editorial design and layout for a quarterly streetwear and urban lifestyle magazine." },
+            { id: 6, title: "Abstract Flow 3D", category: "Illustration", imageUrl: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?q=80&w=2000&auto=format&fit=crop", description: "A series of 3D renders exploring fluid dynamics, metallic textures, and vibrant lighting." },
+            { id: 8, title: "Music Festival Website", category: "UI/UX", imageUrl: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2000&auto=format&fit=crop", description: "An immersive, highly interactive web experience for an electronic music festival." },
+            { id: 9, title: "Retro Wave Vinyl", category: "Print", imageUrl: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=2000&auto=format&fit=crop", description: "Vinyl record sleeve design inspired by 80s synthwave aesthetics and analog textures." }
+        ];
+        const CATEGORIES = ["All", "Branding", "Illustration", "UI/UX", "Print"];
+
+        // --- APP STATE ---
+        let activeCategory = "All";
+        let selectedProject = null;
+        let mobileMenuOpen = false;
+
+        // --- DOM ELEMENTS ---
+        const navbar = document.getElementById('navbar');
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuIcon = document.getElementById('mobile-menu-icon');
+        const filterContainer = document.getElementById('filter-container');
+        const projectGrid = document.getElementById('project-grid');
+        const modal = document.getElementById('modal');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            renderFilters();
+            renderGrid();
+            lucide.createIcons();
+        });
+
+        // --- SCROLL EFFECT ---
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-[#0a0a0a]/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10', 'py-4');
+                navbar.classList.remove('bg-transparent', 'py-6');
+            } else {
+                navbar.classList.add('bg-transparent', 'py-6');
+                navbar.classList.remove('bg-[#0a0a0a]/90', 'backdrop-blur-md', 'shadow-lg', 'border-b', 'border-white/10', 'py-4');
+            }
+        });
+
+        // --- MOBILE MENU ---
+        function toggleMobileMenu() {
+            mobileMenuOpen = !mobileMenuOpen;
+            if (mobileMenuOpen) {
+                mobileMenu.classList.remove('translate-x-full');
+                mobileMenu.classList.add('translate-x-0');
+                mobileMenuIcon.setAttribute('data-lucide', 'x');
+            } else {
+                mobileMenu.classList.add('translate-x-full');
+                mobileMenu.classList.remove('translate-x-0');
+                mobileMenuIcon.setAttribute('data-lucide', 'menu');
+            }
+            lucide.createIcons();
+        }
+
+        mobileMenuBtn.addEventListener('click', toggleMobileMenu);
+        document.querySelectorAll('.mobile-link').forEach(link => {
+            link.addEventListener('click', () => { if(mobileMenuOpen) toggleMobileMenu(); });
+        });
+
+        // --- PORTFOLIO LOGIC ---
+        window.setActiveCategory = (category) => {
+            activeCategory = category;
+            renderFilters();
+            renderGrid();
+        };
+
+        function renderFilters() {
+            filterContainer.innerHTML = CATEGORIES.map(category => `
+                <button onclick="setActiveCategory('${category}')" class="px-4 py-2 rounded-full text-sm font-medium transition-all ${
+                    activeCategory === category 
+                        ? 'bg-white text-black' 
+                        : 'bg-white/5 text-gray-300 hover:bg-white/10'
+                }">
+                    ${category}
+                </button>
+            `).join('');
+        }
+
+        function renderGrid() {
+            const filteredProjects = activeCategory === "All" 
+                ? PORTFOLIO_DATA 
+                : PORTFOLIO_DATA.filter(project => project.category === activeCategory);
+
+            projectGrid.innerHTML = filteredProjects.map((project, index) => `
+                <div class="group relative rounded-2xl overflow-hidden bg-gray-900 aspect-[4/5] cursor-pointer" onclick="openModal(${project.id})" style="animation-delay: ${index * 100}ms">
+                    <img src="${project.imageUrl}" alt="${project.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" loading="lazy" />
+                    <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                            <span class="text-purple-400 font-semibold text-sm tracking-wider uppercase mb-2 block">${project.category}</span>
+                            <h3 class="text-2xl font-bold text-white mb-2">${project.title}</h3>
+                            <div class="flex items-center text-sm font-medium text-white/80 mt-4 group/btn">
+                                View Project <i data-lucide="chevron-right" class="w-4 h-4 ml-1 group-hover/btn:translate-x-1 transition-transform"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // --- MODAL LOGIC ---
+        window.openModal = (projectId) => {
+            selectedProject = PORTFOLIO_DATA.find(p => p.id === projectId);
+            if (!selectedProject) return;
+
+            document.getElementById('modal-img').src = selectedProject.imageUrl;
+            document.getElementById('modal-img').alt = selectedProject.title;
+            document.getElementById('modal-img-link').href = selectedProject.imageUrl;
+            document.getElementById('modal-category').textContent = selectedProject.category;
+            document.getElementById('modal-title').textContent = selectedProject.title;
+            document.getElementById('modal-desc').textContent = selectedProject.description;
+
+            resetAiCritique();
+            
+            document.body.style.overflow = 'hidden';
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            lucide.createIcons();
+        };
+
+        function closeModal() {
+            selectedProject = null;
+            document.body.style.overflow = 'unset';
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+
+        // --- AI CRITIQUE LOGIC ---
+        function resetAiCritique() {
+            const section = document.getElementById('ai-critique-section');
+            section.innerHTML = `
+                <button onclick="handleGetCritique()" class="w-full py-3 rounded-lg bg-white/5 hover:bg-white/10 text-purple-300 font-medium transition-colors flex items-center justify-center gap-2 text-sm">
+                    <i data-lucide="sparkles" class="w-4 h-4"></i> ✨ Get AI Director's Insight
+                </button>
+            `;
+            lucide.createIcons();
+        }
+
+        window.handleGetCritique = async () => {
+            if (!selectedProject) return;
+            const section = document.getElementById('ai-critique-section');
+            
+            section.innerHTML = `
+                <button disabled class="w-full py-3 rounded-lg bg-white/5 text-purple-300 font-medium flex items-center justify-center gap-2 text-sm opacity-50">
+                    <i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> Analyzing Design...
+                </button>
+            `;
+            lucide.createIcons();
+
+            try {
+                const prompt = `Analyze this design project: Title: ${selectedProject.title}. Category: ${selectedProject.category}. Description: ${selectedProject.description}.`;
+                const system = "You are an expert art director. Provide a 2-3 sentence professional, insightful critique of the design concept described. Highlight why this aesthetic works for its category. Be highly encouraging but professional.";
+                const result = await generateAIContent(prompt, system);
+                
+                section.innerHTML = `
+                    <div>
+                        <div class="flex items-center gap-2 text-purple-400 mb-2 font-semibold text-sm">
+                            <i data-lucide="sparkles" class="w-4 h-4"></i> AI Director's Insight
+                        </div>
+                        <p class="text-sm text-gray-300 leading-relaxed italic">"${result}"</p>
+                    </div>
+                `;
+                lucide.createIcons();
+            } catch (error) {
+                section.innerHTML = `<p class="text-sm text-red-400">Unable to generate critique at this time. Please try again later.</p>`;
+            }
+        };
+
+        // --- AI BRAINSTORM LOGIC ---
+        const brandInput = document.getElementById('brand-input');
+        const brainstormBtn = document.getElementById('brainstorm-btn');
+
+        async function handleBrainstorm() {
+            const description = brandInput.value.trim();
+            if (!description) return;
+
+            const originalBtnHtml = brainstormBtn.innerHTML;
+            brainstormBtn.disabled = true;
+            brainstormBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            brainstormBtn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> ✨ Brainstorm`;
+            lucide.createIcons();
+
+            try {
+                const prompt = `A potential client has this business/idea: "${description}". Suggest 3 essential graphic design deliverables they need, and 1 sentence describing a potential visual direction. Format with clean text, no markdown headers, just bullet points.`;
+                const system = "You are a senior creative director helping a potential client figure out what design services they need. Be concise, inspiring, and persuasive.";
+                const result = await generateAIContent(prompt, system);
+
+                const resultUI = document.getElementById('brainstorm-result');
+                const initialUI = document.getElementById('brainstorm-initial-ui');
+                
+                initialUI.classList.add('hidden');
+                resultUI.innerHTML = `
+                    <div class="bg-[#111]/80 border border-purple-500/30 rounded-xl p-6 md:p-8 duration-500">
+                        <div class="flex items-center gap-2 text-pink-400 mb-4 font-semibold">
+                            <i data-lucide="sparkles" class="w-5 h-5"></i> Suggested Project Scope
+                        </div>
+                        <div class="text-gray-300 leading-relaxed whitespace-pre-wrap mb-6 text-sm md:text-base">${result}</div>
+                        <div class="flex items-center gap-4 pt-6 border-t border-white/10">
+                            <p class="text-sm text-gray-400 flex-1">Ready to bring this to life?</p>
+                            <a href="mailto:hello@studiox.com?subject=Project Inquiry&body=Hi! I used your AI brainstormer. My idea: ${encodeURIComponent(description)}. Let's chat!" class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-white text-black font-bold text-sm tracking-wide hover:scale-105 transition-transform">
+                                <i data-lucide="mail" class="w-4 h-4"></i> hello@studiox.com
+                            </a>
+                        </div>
+                    </div>
+                `;
+                resultUI.classList.remove('hidden');
+                lucide.createIcons();
+            } catch (error) {
+                alert("Hmm, my creative circuits are jammed. Let's just chat via email instead!");
+            } finally {
+                brainstormBtn.disabled = false;
+                brainstormBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                brainstormBtn.innerHTML = originalBtnHtml;
+                lucide.createIcons();
+            }
+        }
+
+        brainstormBtn.addEventListener('click', handleBrainstorm);
+        brandInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') handleBrainstorm();
+        });
+
+    </script>
+</body>
+</html>
